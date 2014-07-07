@@ -1,0 +1,13 @@
+{
+    "name": "The_Bridge",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "node ./app.node.js"
+    },
+    "dependencies": {
+        "underscore" : "*",
+        "async" : "*",
+        "lazy.js" : "*"
+    }
+}

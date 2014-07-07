@@ -2,7 +2,7 @@ Message structure
 =================
 
 
-'''JS
+```js 
 // Get sensors
 {
 	"req": "sensor"
@@ -33,4 +33,4 @@ Message structure
 		// etc...
 	]
 }
-'''
+```

@@ -5,7 +5,7 @@ var async = require("async");
 var net = require("net");
 
 
-var ship = require("./ship");
+var ship = require("./Ship");
 
 
 

@@ -1,8 +1,12 @@
 var _ = require("underscore");
 var lazy = require("lazy.js");
 var async = require("async");
-var ship = {}
+
+
+function Ship(){
+
+}
 
 
 
-module.exports = ship
+module.exports = Ship;

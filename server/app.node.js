@@ -65,17 +65,19 @@ function disableDrone(name) {
 }
 
 
-console.log(drone);
+//console.log(drone);
 
-_.each(drone, function(d){
-	//var s = "";
-	if(d.state == 1){
-		testData.sensors.push(d);
-	}
-	//console.log(s);
-});
+//add all active drone to sensor data
+function addActiveDronesToSensorData(){
+	_.each(drone, function(d){
+		if(d.state == 1){
+			testData.sensors.push(d);
+		}
+	});
+}
 
-//console.log(testData);
+
+console.log(testData);
 
 
 

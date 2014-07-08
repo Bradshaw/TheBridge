@@ -7,6 +7,57 @@ var net = require("net");
 var Connection = require("./Connection");
 var ship = require("./Ship");
 
+var testData = //{ "sensors": "dvcdvdvd"};//*/
+	{
+		"sensors": 
+		[			
+			{
+				"name" : "ship"
+			},
+			{
+				"name" : "cdcd"
+			}
+		]
+	}
+
+var drone =
+		[
+			{
+				"name": "Drone1",
+				"x": 20,
+				"y": 40,
+				"state": 0
+			},
+			{
+				"name": "Drone2",
+				"x": 200,
+				"y": 400,
+				"state": 1
+			}
+		];
+
+
+function replaceByValue() {
+    _.each(drone, function(k){
+        if( k.state == 1 ) {
+            k.state = -1;
+        }
+    });
+}
+
+replaceByValue();
+
+console.log(drone);
+
+_.each(drone, function(d){
+	//var s = "";
+	if(d.state == 1){
+		testData.sensors.push(d);
+	}
+	//console.log(s);
+});
+
+//console.log(testData);
 
 
 

@@ -26,7 +26,7 @@ var drone =
 				"name": "Drone1",
 				"x": 20,
 				"y": 40,
-				"state": 0
+				"state": 0 // 0 not active, 1 active, -1 destroy
 			},
 			{
 				"name": "Drone2",
@@ -37,7 +37,8 @@ var drone =
 		];
 
 
-function replaceByValue() {
+//destroy all active drone
+function destroyActiveDrone() {
     _.each(drone, function(k){
         if( k.state == 1 ) {
             k.state = -1;
@@ -45,7 +46,24 @@ function replaceByValue() {
     });
 }
 
-replaceByValue();
+//destroy all active drone
+function disableAllDrones() {
+    _.each(drone, function(k){
+        if( k.state == 1 ) {
+            k.state = 0;
+        }
+    });
+}
+
+//destroy drone with name name
+function disableDrone(name) {
+    _.each(drone, function(k){
+        if( k.name == name ) {
+            k.state = 0;
+        }
+    });
+}
+
 
 console.log(drone);
 

@@ -19,30 +19,67 @@ Sensor.prototype.start = function(){
 Sensor.prototype.ping = function(){
     var that = this;
     lazy(this.sim.space).each(function(ob){
-        that.sim.send(
-        {
-            sensor: {
-                x: that.attach.x,
-                y: that.attach.y,
-                reading: {
-                    name: "em",
-                    method: "range",
-                    value: useful.distance(that.attach, ob)
-                }
-            }
-        });
-        that.sim.send(
-            {
-                sensor: {
-                    x: that.attach.x,
-                    y: that.attach.y,
-                    reading: {
-                        name: "gr",
-                        method: "angle",
-                        value: useful.distance(that.attach, ob)
+        var em = ob.signature.getEM(useful.distance(that.attach, ob));
+        var gr = ob.signature.getGR(useful.distance(that.attach, ob));
+        var th = ob.signature.getTH(useful.distance(that.attach, ob));
+
+        if( (em > 1) && (em < 100) ){
+            that.sim.send(
+                {
+                    sensor: {
+                        x: that.attach.x,
+                        y: that.attach.y,
+                        reading: {
+                            name: "em",
+                            method: "range",
+                            value: useful.distance(that.attach, ob)
+                        }
                     }
-                }
-            });
+                });
+        }
+
+        if( (gr > 1) && (gr < 100) ){
+            that.sim.send(
+                {
+                    sensor: {
+                        x: that.attach.x,
+                        y: that.attach.y,
+                        reading: {
+                            name: "gr",
+                            method: "angle",
+                            value: useful.angle(that.attach, ob)
+                        }
+                    }
+                });
+        }
+
+        if( (th > 1) && (gr < 30) ){
+            that.sim.send(
+                {
+                    sensor: {
+                        x: that.attach.x,
+                        y: that.attach.y,
+                        reading: {
+                            name: "th",
+                            method: "range",
+                            value: useful.distance(that.attach, ob)
+                        }
+                    }
+                });
+            that.sim.send(
+                {
+                    sensor: {
+                        x: that.attach.x,
+                        y: that.attach.y,
+                        reading: {
+                            name: "th",
+                            method: "angle",
+                            value: useful.angle(that.attach, ob)
+                        }
+                    }
+                });
+        }
+
     });
 };
 

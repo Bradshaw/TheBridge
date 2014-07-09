@@ -26,7 +26,7 @@ useful.angle = function(o1, o2){
 };
 
 useful.falloff = function(amp, distance){
-    Math.max(amp-distance, 0);
+    return amp / (distance * distance);
 };
 
 useful.getRandomCoordinates = function(){

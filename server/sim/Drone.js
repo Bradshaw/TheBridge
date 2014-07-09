@@ -10,7 +10,7 @@ function Drone(sim){
     this.x = coord.x;
     this.y = coord.y;
     this.sim = sim;
-    this.signature = new Signature(50, 2, 25);
+    this.signature = new Signature(0, 0, 0);	
     this.sensor = new Sensor(this.sim, this);
     this.sensor.start();
     this.destructible = true;

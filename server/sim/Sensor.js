@@ -23,7 +23,7 @@ Sensor.prototype.ping = function(){
         var gr = ob.signature.getGR(useful.distance(that.attach, ob));
         var th = ob.signature.getTH(useful.distance(that.attach, ob));
 
-        if( (em > 1) && (em < 100) ){
+        if( (em > 20) ){
             that.sim.send(
                 {
                     sensor: {
@@ -38,7 +38,7 @@ Sensor.prototype.ping = function(){
                 });
         }
 
-        if( (gr > 1) && (gr < 100) ){
+        if( (gr > 20) ){
             that.sim.send(
                 {
                     sensor: {
@@ -53,7 +53,7 @@ Sensor.prototype.ping = function(){
                 });
         }
 
-        if( (th > 1) && (gr < 30) ){
+        if( (th > 80) ){
             that.sim.send(
                 {
                     sensor: {

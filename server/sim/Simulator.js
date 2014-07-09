@@ -10,7 +10,7 @@ var Drone = require("./Drone");
 function Simulator(){
     this.playerShip = new Ship(this);
     this.space = [this.playerShip];
-    for (var i=0; i<2; i++){
+    for (var i=0; i<100; i++){
         this.space.push(new Celestial(this));
     }
     for (var i=0; i<3; i++){
@@ -52,8 +52,18 @@ Simulator.prototype.addConnection = function(conn){
 };
 
 Simulator.prototype.send = function(ob){
+    this.connections = _.filter(this.connections, function(conn){
+         return conn.active;
+    });
     _.each(this.connections, function(conn){
         conn.send(ob);  
+    });
+};
+
+Simulator.prototype.dump = function(){
+    var that = this;
+    _.each(this.space, function(ob){
+        that.send({dump: {x: ob.x, y:ob.y}});        
     });
 };
 

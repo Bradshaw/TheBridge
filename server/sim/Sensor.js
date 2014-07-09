@@ -13,8 +13,16 @@ Sensor.prototype.impulse = function(x, y, range){
 };
 
 Sensor.prototype.start = function(){
-    setInterval(this.ping.bind(this), 1000);  
+    this.interval = setInterval(this.ping.bind(this), 1000);  
 };
+
+Sensor.prototype.stop = function() {
+    if (this.interval){
+        clearInterval(this.interval);
+        delete this.interval;
+    }
+};
+
 
 Sensor.prototype.ping = function(){
     var that = this;
@@ -40,7 +48,6 @@ Sensor.prototype.ping = function(){
                     }
                 });
         }
-
         if( (gr > 20) ){
             //console.log("grrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
             that.sim.send(
@@ -58,7 +65,6 @@ Sensor.prototype.ping = function(){
                     }
                 });
         }
-
         if( (th > 50) ){
             //console.log("thhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
             that.sim.send(

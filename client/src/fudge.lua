@@ -81,6 +81,7 @@ end
 local getAllImages = function(folder)
 	local images = {}
 	for i,v in ipairs(love.filesystem.getDirectoryItems(folder)) do
+		print(folder.."/"..v)
 		table.insert(images, {
 			name = split(v, ".")[1],
 			tex = love.graphics.newImage(folder.."/"..v)

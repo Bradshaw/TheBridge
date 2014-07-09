@@ -9,6 +9,7 @@ function Enemy(){
     this.x = coord.x;
     this.y = coord.y;
     this.signature = new Signature(100, 5, 50);
+    this.destructible = true;
 }
 
 module.exports = Enemy;

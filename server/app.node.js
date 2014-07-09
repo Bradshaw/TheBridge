@@ -5,18 +5,18 @@ var net = require("net");
 
 
 var Connection = require("./Connection");
-var Ship = require("./sim/Ship");
+var Simulator = require("./sim/Simulator");
 
-
-var theKatana = new Ship();
+var sim = new Simulator(); 
 
 var server = net.createServer(function (socket) {
     var conn = new Connection(socket);
     
+    sim.addConnection(conn);
     
     
     conn.on("fire", function(data){
-        
+        sim.fire(data);
     });
 });
 

@@ -6,12 +6,15 @@ var Signature = require("./Signature");
 var Sensor = require("./Sensor");
 
 
-function Ship(){
+function Ship(sim){
     var coord = useful.getRandomCoordinates();
     this.x = coord.x;
     this.y = coord.y;
-    this.signature = new Signature(100, 5, 50);
-    this.sensor = new Sensor(this);
+    this.signature = new Signature(0, 0, 0);
+    this.sim = sim;
+    this.destructible = true;
+    this.sensor = new Sensor(this.sim,this);
+    this.sensor.start();
 	this.mspt = 1000/100;
     this.ambiantTemperature = 20;
     this.gun  = {

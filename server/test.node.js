@@ -1,4 +1,4 @@
-var ship = require("./Ship");
+var ship = require("./sim/Ship");
 
 s = new ship();
 

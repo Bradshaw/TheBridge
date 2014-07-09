@@ -5,6 +5,8 @@ var useful = require("./useful");
 
 
 function Ship(){
+    this.x = Math.random()*800;
+    this.y = Math.random()*600;
 	this.mspt = 1000/100;
     this.ambiantTemperature = 20;
     this.gun  = {

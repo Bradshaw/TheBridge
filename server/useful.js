@@ -9,11 +9,14 @@ useful.jitter = function(base){
     return 1 + Math.random()*b - Math.random()*b;
 };
 
-
-useful.distance = function(o1, o2){
+useful.distance2 = function(o1, o2){
     var dx = o2.x-o1.x;
     var dy = o2.y-o1.y;
-    return Math.sqrt(dx*dx+dy*dy);
+    return (dx*dx+dy*dy);
+};
+
+useful.distance = function(o1, o2){
+    return Math.sqrt(useful.distance2(o1, o2));
 };
 
 useful.angle = function(o1, o2){
@@ -28,8 +31,8 @@ useful.falloff = function(amp, distance){
 
 useful.getRandomCoordinates = function(){
     return {
-        x: Math.random()*1000,
-        y: Math.random()*1000
+        x: Math.random()*800,
+        y: Math.random()*600
     }
 };
 

@@ -15,7 +15,7 @@ Signature.prototype.getAtRange = function(sig, range){
 };
 
 Signature.prototype.getEM = function(range){
-    return this.getAtRange("em", range) * 100000;
+    return this.getAtRange("em", range) * 1000;
 };
 
 Signature.prototype.getGR = function(range){

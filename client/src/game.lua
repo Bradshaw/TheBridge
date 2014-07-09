@@ -6,6 +6,9 @@ end
 
 function state:enter( pre )
 	time = 0
+	mousedown = 0
+	mouseX = 0
+	mouseY = 0
 end
 
 
@@ -13,6 +16,13 @@ function state:leave( next )
 end
 
 function state:update(dt)
+	if love.mouse.isDown('l') then
+		mousedown = math.min(1, mousedown+dt*10)
+		mouseX = love.mouse.getX()
+		mouseY = love.mouse.getY()
+	else
+		mousedown = math.max(0, mousedown-dt*10)
+	end
 	time = time - dt
 	if time<=0 then
 		time = time + 1
@@ -55,9 +65,11 @@ function state:draw()
 	love.graphics.draw(map_canv)
 	love.graphics.setCanvas(map_canv)
 	love.graphics.setColor(0,0,0,12)
-	love.graphics.rectangle("fill",0,0,800,600)
+	love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),love.graphics.getHeight())
 	love.graphics.setCanvas()
-	love.graphics.setCanvas()
+	love.graphics.setColor(255,255,255)
+	love.graphics.draw("ani_cursor", mouseX, mouseY,0,mousedown,mousedown,(100/2),(94/2))
+
 end
 
 

@@ -10,10 +10,10 @@ var Drone = require("./Drone");
 function Simulator(){
     this.playerShip = new Ship(this);
     this.space = [this.playerShip];
-    for (var i=0; i<100; i++){
+    for (var i=0; i<10; i++){
         this.space.push(new Celestial(this));
     }
-    for (var i=0; i<3; i++){
+    for (var i=0; i<1; i++){
         this.space.push(new Drone(this));
     }
     this.connections = [];

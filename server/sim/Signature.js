@@ -15,15 +15,15 @@ Signature.prototype.getAtRange = function(sig, range){
 };
 
 Signature.prototype.getEM = function(range){
-    return this.getAtRange("em", range) * 1000;
+    return this.getAtRange("em", range) * 100;
 };
 
 Signature.prototype.getGR = function(range){
-    return this.getAtRange("gr", range) * 1000;
+    return this.getAtRange("gr", range) * 100;
 };
 
 Signature.prototype.getTH = function(range){
-    return this.getAtRange("th", range) * 1000;
+    return this.getAtRange("th", range) * 100;
 };
 
 module.exports = Signature;

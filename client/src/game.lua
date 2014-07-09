@@ -39,26 +39,29 @@ function state:update(dt)
 		end
 		if o.sensor then
 			local sensor = o.sensor
-			love.graphics.setCanvas(map_canv)
-			love.graphics.setBlendMode("additive")
 			local x = tonumber(sensor.x)
 			local y = tonumber(sensor.y)
 			local read = sensor.reading
-			if read.name=="em" then
-				love.graphics.setColor(0,0,255)
-			elseif read.name == "gr" then
-				love.graphics.setColor(0,255,0)
-			else
-				love.graphics.setColor(255,0,0)
-			end
+			if read.intensity>0 and read.intensity<math.huge then
+				love.graphics.setCanvas(map_canv)
+				love.graphics.setBlendMode("additive")
+				local intensity = math.min(255,math.max(0, read.intensity-read.threshold))
+				if read.name=="em" then
+					love.graphics.setColor(0,0,255,intensity)
+				elseif read.name == "gr" then
+					love.graphics.setColor(0,255,0,intensity)
+				else
+					love.graphics.setColor(255,0,0,intensity)
+				end
 
-			if read.method == "range" then
-				love.graphics.circle("line", x, y, tonumber(read.value));
-			else
-				local d = tonumber(read.value)
-				love.graphics.line(x, y, x+math.cos(d)*1000, y+math.sin(d)*1000)
+				if read.method == "range" then
+					love.graphics.circle("line", x, y, tonumber(read.value));
+				else
+					local d = tonumber(read.value)
+					love.graphics.line(x, y, x+math.cos(d)*1000, y+math.sin(d)*1000)
+				end
+				love.graphics.setCanvas()
 			end
-			love.graphics.setCanvas()
 		end
 		ret = client:receive()
 	end

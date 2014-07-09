@@ -21,7 +21,10 @@ function love.load(arg)
 	})
 
 	map_canv = love.graphics.newCanvas(love.graphics.getWidth(),love.graphics.getHeight())
-
+	love.graphics.setCanvas(map_canv)
+	love.graphics.setColor(255,255,255)
+	love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),love.graphics.getHeight())
+	love.graphics.setCanvas()
 
 	gstate.registerEvents()
 	gstate.switch(game)

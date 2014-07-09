@@ -30,7 +30,6 @@ Sensor.prototype.ping = function(){
         var em = ob.signature.getEM(useful.distance(that.attach, ob));
         var gr = ob.signature.getGR(useful.distance(that.attach, ob));
         var th = ob.signature.getTH(useful.distance(that.attach, ob));
-        console.log("em: "+em+"   gr: "+gr+"   th: "+th);
 
         if( (em > 20) ){
             //console.log("emmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");

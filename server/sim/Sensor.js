@@ -22,8 +22,10 @@ Sensor.prototype.ping = function(){
         var em = ob.signature.getEM(useful.distance(that.attach, ob));
         var gr = ob.signature.getGR(useful.distance(that.attach, ob));
         var th = ob.signature.getTH(useful.distance(that.attach, ob));
+        console.log("em: "+em+"   gr: "+gr+"   th: "+th);
 
         if( (em > 20) ){
+            //console.log("emmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
             that.sim.send(
                 {
                     sensor: {
@@ -32,13 +34,15 @@ Sensor.prototype.ping = function(){
                         reading: {
                             name: "em",
                             method: "range",
-                            value: useful.distance(that.attach, ob)
+                            value: useful.distance(that.attach, ob),
+                            intensity : em
                         }
                     }
                 });
         }
 
         if( (gr > 20) ){
+            //console.log("grrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
             that.sim.send(
                 {
                     sensor: {
@@ -47,13 +51,16 @@ Sensor.prototype.ping = function(){
                         reading: {
                             name: "gr",
                             method: "angle",
-                            value: useful.angle(that.attach, ob)
+                            value: useful.angle(that.attach, ob),
+                            intensity : gr
+
                         }
                     }
                 });
         }
 
-        if( (th > 80) ){
+        if( (th > 50) ){
+            //console.log("thhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
             that.sim.send(
                 {
                     sensor: {
@@ -62,7 +69,8 @@ Sensor.prototype.ping = function(){
                         reading: {
                             name: "th",
                             method: "range",
-                            value: useful.distance(that.attach, ob)
+                            value: useful.distance(that.attach, ob),
+                            intensity : th
                         }
                     }
                 });
@@ -74,7 +82,8 @@ Sensor.prototype.ping = function(){
                         reading: {
                             name: "th",
                             method: "angle",
-                            value: useful.angle(that.attach, ob)
+                            value: useful.angle(that.attach, ob),
+                            intensity : th
                         }
                     }
                 });

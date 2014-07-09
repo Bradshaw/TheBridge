@@ -14,7 +14,6 @@ var server = net.createServer(function (socket) {
     
     sim.addConnection(conn);
     
-    
     conn.on("fire", function(data){
         sim.fire(data);
     });

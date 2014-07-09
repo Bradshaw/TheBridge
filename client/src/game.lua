@@ -33,7 +33,8 @@ function state:update(dt)
 		if o.dump then
 			love.graphics.setCanvas(map_canv)
 			love.graphics.setColor(255,255,255)
-			love.graphics.point(o.dump.x, o.dump.y)
+			love.graphics.line(o.dump.x-5, o.dump.y-5,o.dump.x+5, o.dump.y+5)
+			love.graphics.line(o.dump.x-5, o.dump.y+5,o.dump.x+5, o.dump.y-5)
 			love.graphics.setCanvas()
 		end
 		if o.sensor then

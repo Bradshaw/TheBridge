@@ -14,7 +14,6 @@ function Ship(sim){
     this.sim = sim;
     this.destructible = true;
     this.sensor = new Sensor(this.sim,this);
-    this.sensor.start();
 	this.mspt = 1000/100;
     this.ambiantTemperature = 20;
     this.gun  = {
@@ -43,11 +42,14 @@ Ship.prototype.tick = function() {
 
 Ship.prototype.start = function() {
 	this.interval = setInterval(this.tick.bind(this), this.mspt);
+    this.sensor.start();
 };
 
 Ship.prototype.stop = function() {
 	if (this.interval){
 		clearInterval(this.interval);
+        this.sensor.stop();
+        delete this.interval;
 	}
 };
 

@@ -14,9 +14,19 @@ var server = net.createServer(function (socket) {
     
     sim.addConnection(conn);
     
+    conn.on("jump", function(data){
+        sim.playerShip.x = data.x;
+        sim.playerShip.y = data.y;
+        sim.playerShip.stop();
+        sim.playerShip.start();
+    });
     
     conn.on("fire", function(data){
         sim.fire(data);
+    });
+    
+    conn.on("debug", function(){
+         sim.dump();
     });
 });
 

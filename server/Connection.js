@@ -38,8 +38,8 @@ Connection.prototype.send = function(object){
 Connection.prototype.parse = function(line){
     var req = JSON.parse(line);
     if (req.hasOwnProperty('command')) {
-        _.each(this.callbacks[req.command.do], function(cb){
-            cb(req.command.data);
+        _.each(this.callbacks[req.command], function(cb){
+            cb(req.data);
         });
     }
 };

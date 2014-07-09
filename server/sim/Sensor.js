@@ -13,8 +13,16 @@ Sensor.prototype.impulse = function(x, y, range){
 };
 
 Sensor.prototype.start = function(){
-    setInterval(this.ping.bind(this), 1000);  
+    this.interval = setInterval(this.ping.bind(this), 1000);  
 };
+
+Sensor.prototype.stop = function() {
+    if (this.interval){
+        clearInterval(this.interval);
+        delete this.interval;
+    }
+};
+
 
 Sensor.prototype.ping = function(){
     var that = this;
@@ -23,7 +31,7 @@ Sensor.prototype.ping = function(){
         var gr = ob.signature.getGR(useful.distance(that.attach, ob));
         var th = ob.signature.getTH(useful.distance(that.attach, ob));
 
-        if( (em > 20) ){
+        if( (em > 2) ){
             that.sim.send(
                 {
                     sensor: {
@@ -38,7 +46,7 @@ Sensor.prototype.ping = function(){
                 });
         }
 
-        if( (gr > 20) ){
+        if( (gr > 2) ){
             that.sim.send(
                 {
                     sensor: {
@@ -53,7 +61,7 @@ Sensor.prototype.ping = function(){
                 });
         }
 
-        if( (th > 80) ){
+        if( (th > 8) ){
             that.sim.send(
                 {
                     sensor: {

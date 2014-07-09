@@ -30,6 +30,12 @@ function state:update(dt)
 	ret = client:receive()
 	while ret do
 		local o = JSON:decode(ret)
+		if o.dump then
+			love.graphics.setCanvas(map_canv)
+			love.graphics.setColor(255,255,255)
+			love.graphics.point(o.dump.x, o.dump.y)
+			love.graphics.setCanvas()
+		end
 		if o.sensor then
 			local sensor = o.sensor
 			love.graphics.setCanvas(map_canv)
@@ -64,7 +70,7 @@ function state:draw()
 	love.graphics.setColor(255,255,255)
 	love.graphics.draw(map_canv)
 	love.graphics.setCanvas(map_canv)
-	love.graphics.setColor(0,0,0,12)
+	love.graphics.setColor(0,0,0,5)
 	love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),love.graphics.getHeight())
 	love.graphics.setCanvas()
 	love.graphics.setColor(255,255,255)
@@ -85,6 +91,9 @@ function state:keypressed(key, isRepeat)
 	if key=='escape' then
 		love.event.push('quit')
 	end
+	if key==" " then
+		client:send(JSON:encode({command="debug", data={}}))
+	end
 end
 
 
@@ -101,6 +110,8 @@ end
 
 
 function state:mousereleased(x, y, btn)
+	local jumpTo = {x = x, y = y}
+	client:send(JSON:encode({command="jump", data=jumpTo}))
 end
 
 

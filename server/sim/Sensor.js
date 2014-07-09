@@ -42,6 +42,7 @@ Sensor.prototype.ping = function(){
                             name: "em",
                             method: "range",
                             value: useful.distance(that.attach, ob),
+                            threshold: 20,
                             intensity : em
                         }
                     }
@@ -58,13 +59,14 @@ Sensor.prototype.ping = function(){
                             name: "gr",
                             method: "angle",
                             value: useful.angle(that.attach, ob),
+                            threshold: 20,
                             intensity : gr
 
                         }
                     }
                 });
         }
-        if( (th > 50) ){
+        if( (th > 400000000000) ){
             //console.log("thhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
             that.sim.send(
                 {
@@ -75,6 +77,7 @@ Sensor.prototype.ping = function(){
                             name: "th",
                             method: "range",
                             value: useful.distance(that.attach, ob),
+                            threshold: 50,
                             intensity : th
                         }
                     }
@@ -88,6 +91,7 @@ Sensor.prototype.ping = function(){
                             name: "th",
                             method: "angle",
                             value: useful.angle(that.attach, ob),
+                            threshold: 50,
                             intensity : th
                         }
                     }

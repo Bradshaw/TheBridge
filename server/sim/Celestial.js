@@ -8,7 +8,7 @@ function Celestial(sim){
     var coord = useful.getRandomCoordinates();
     this.x = coord.x;
     this.y = coord.y;
-    this.signature = new Signature(20, 10000, 5000);
+    this.signature = new Signature(20, 5000+Math.random()*10000, 5000);
     this.sim = sim;
 }
 

@@ -7,12 +7,13 @@ function Connection(socket){
     this.socket.on('error', function(err) {
         console.log(err)
     });
-    this.socket.on('end', function() {
-        console.log("Closed");
+    this.socket.on('close', function() {
+        that.active = false;
     });
     this.socket.on('data', function(data) {
         that.unpack(data, "[BREAK]");
     });
+    this.active = true;
     this.callbacks = {};
 }
 
@@ -31,8 +32,6 @@ Connection.prototype.unpack = function(str, sym) {
 };
 
 Connection.prototype.send = function(object){
-    console.log("Sending:");
-    console.log(object);
     this.socket.write(JSON.stringify(object)+'\n');
 };
 

@@ -52,7 +52,11 @@ Simulator.prototype.addConnection = function(conn){
 };
 
 Simulator.prototype.send = function(ob){
+    this.connections = _.filter(this.connections, function(conn){
+         return conn.active;
+    });
     _.each(this.connections, function(conn){
+        console.log("Send");
         conn.send(ob);  
     });
 };

@@ -31,8 +31,8 @@ useful.falloff = function(amp, distance){
 
 useful.getRandomCoordinates = function(){
     return {
-        x: Math.random()*800,
-        y: Math.random()*600
+        x: Math.random()*1280,
+        y: Math.random()*768
     }
 };
 

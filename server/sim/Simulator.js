@@ -17,10 +17,13 @@ function Simulator(){
         this.space.push(new Celestial(this));
     }
     for (var i=0; i<10; i++){
-        this.space.push(new Enemy(this));
-    }
-    for (var i=0; i<1; i++){
-        this.space.push(new Drone(this));
+        var en = new Enemy(this);
+        while (useful.distance(en, this.playerShip)<200){
+            var c = useful.getRandomCoordinates();
+            en.x = c.x;
+            en.y = c.y;
+        }
+        this.space.push(en);
     }
 
     this.start();
@@ -48,8 +51,8 @@ Simulator.prototype.destroyDistantDrone = function(){
 
 Simulator.prototype.prune = function(){
     this.space = lazy(this.space).filter(
-        function(){
-            return (!this.purge);
+        function(ob){
+            return (!ob.purge);
         }).toArray();
 };
 

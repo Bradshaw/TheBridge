@@ -20,7 +20,7 @@ function state:leave( next )
 end
 
 function state:update(dt)
-	if love.mouse.isDown('l') then
+	if love.mouse.isDown('r') then
 		mousedown = math.min(1, mousedown+dt*10)
 		mouseX = love.mouse.getX()
 		mouseY = love.mouse.getY()
@@ -110,6 +110,17 @@ function state:draw()
 	end
 	love.graphics.setShader()
 	if status then
+		love.graphics.setColor(0,255,255)
+		love.graphics.setShader(alphaToWhite)
+		anim = tag_ship:getAnimation("ani_cursor")
+		love.graphics.draw(anim,
+			status.ship.x,
+			status.ship.y,
+			0,0.3,0.3,(268/2),(283/2))
+		love.graphics.setColor(0,255,255,25)
+		love.graphics.circle("fill", status.ship.x, status.ship.y, 200)
+		love.graphics.setShader()
+		love.graphics.setColor(255,255,255)
 		print("have status")
 		local line = 1
 		love.graphics.print("Gun:",10,line*20)
@@ -122,7 +133,7 @@ function state:draw()
 			love.graphics.print(k..": "..v, 20, line*20)
 			line = line+1
 		end
-				love.graphics.print("Jump Drive:",10,line*20)
+		love.graphics.print("Jump Drive:",10,line*20)
 		line = line +1
 		for k,v in pairs(status.jumpDrive) do
 			local v = v
@@ -135,6 +146,18 @@ function state:draw()
 			end
 			love.graphics.print(k..": "..v, 20, line*20)
 			line = line+1
+		end
+		love.graphics.print("Drones:", 10, line*20)
+		line = line+1
+		if status.drones then
+			for i,v in ipairs(status.drones) do
+				love.graphics.setColor(255,0,255)
+				love.graphics.print(v.id, 20, 20*line)
+				love.graphics.circle("fill", v.x, v.y, 5)
+				love.graphics.setColor(255,0,255,25)
+				love.graphics.circle("fill", v.x, v.y, 200)
+				line = line+1
+			end
 		end
 	end
 end
@@ -164,6 +187,22 @@ function state:keypressed(key, isRepeat)
 	if key=="x" then
 		send("bomb", {x=love.mouse.getX(),y=love.mouse.getY(),speed=100})
 	end
+	if key=="d" then
+		deployDrone()
+	end
+	if key=="r" then
+		retrieveDrones()
+	end
+	if tonumber(key) then
+		if status.drones[tonumber(key)] then
+			moveDrone(
+				status.drones[tonumber(key)].id,
+				love.mouse.getX(),
+				love.mouse.getY()
+			)
+		end
+	end
+
 end
 
 
@@ -180,8 +219,9 @@ end
 
 
 function state:mousereleased(x, y, btn)
-	local jumpTo = {x = x, y = y}
-	client:send(JSON:encode({command="jump", data=jumpTo}))
+	if btn=="r" then
+		jump(x, y)
+	end
 end
 
 

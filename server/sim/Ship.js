@@ -16,6 +16,7 @@ function Ship(sim){
     this.sensor = new Sensor(this.sim,this);
 	this.mspt = 1000/100;
     this.ambiantTemperature = 20;
+    this.availableDrones = 5;
     this.gun  = {
         minRate: 0,
         maxRate: 1,
@@ -67,6 +68,7 @@ Ship.prototype.tick = function() {
 };
 
 Ship.prototype.start = function() {
+    this.stop();
 	this.interval = setInterval(this.tick.bind(this), this.mspt);
     this.sensor.start();
     this.pumpInterval = setInterval(this.pump.bind(this), 200);
@@ -90,6 +92,10 @@ Ship.prototype.fire = function(){
 
 Ship.prototype.getStatus = function(){
     var status = {};
+    status.ship = {
+        x: this.x,
+        y: this.y
+    };
     status.gun = {
         charge: this.gun.charge,
         cooling: this.gun.curCool,
@@ -107,7 +113,19 @@ Ship.prototype.getStatus = function(){
         ready: this.jumpDrive.charge>800,
         temp: this.jumpDrive.temperature
     };
-    status.drones = {};
+    status.drones = lazy(this.sim.space)
+        .filter(function(ob){
+            return ob.identifier=="Drone"
+        })
+        .map(function(ob){
+            return {
+                x: ob.x,
+                y: ob.y,
+                id: ob.id
+            };
+        })
+        .toArray();
+    
     return status;
 };
 

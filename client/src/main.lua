@@ -1,5 +1,6 @@
 require("useful")
 function love.load(arg)
+	require("commands")
 	JSON = require("JSON")
 	require("brdcastcl")
 	client = EchoClient:new()
@@ -8,10 +9,10 @@ function love.load(arg)
 
 	fudge = require("fudge")
 	cursor = fudge.new("images/curseur")
-		fudge.set({
-		monkey= true,
-		current = cursor
-		})
+	fudge.set({
+	monkey= true,
+	current = cursor
+	})
 
 	cursor:countToAnimation("cursor_anim",50,{
 		numlen = 4,
@@ -19,6 +20,15 @@ function love.load(arg)
 		name = "cursor",
 		framerate = 30
 	})
+
+	tag_ship = fudge.new("images/tag_ship")
+	tag_ship:countToAnimation("tag_ship_anim",50,{
+		numlen = 4,
+		startAt = 0,
+		name = "cursor",
+		framerate = 30
+	})
+
 
 	darken = love.graphics.newShader("shaders/darken.fs")
 	alphaToWhite = love.graphics.newShader("shaders/alphaToWhite.fs")

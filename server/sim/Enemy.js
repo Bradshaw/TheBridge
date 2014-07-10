@@ -8,7 +8,7 @@ function Enemy(sim){
     var coord = useful.getRandomCoordinates();
     this.x = coord.x;
     this.y = coord.y;
-    this.signature = new Signature(100, 5, 50);
+    this.signature = new Signature(3000+Math.random()*5000, 3000, 50);
     this.destructible = true;
     this.sim = sim;
 }

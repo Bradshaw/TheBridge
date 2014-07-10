@@ -9,6 +9,7 @@ function state:enter( pre )
 	mousedown = 0
 	mouseX = 0
 	mouseY = 0
+	markers = {}
 end
 
 
@@ -79,6 +80,10 @@ function state:draw()
 	love.graphics.setCanvas()
 	love.graphics.setColor(255,255,255)
 	love.graphics.draw("ani_cursor", mouseX, mouseY,0,mousedown,mousedown,(100/2),(94/2))
+	for i,v in ipairs(markers) do
+		anim = cursor:getAnimation("ani_cursor")
+		love.graphics.draw(anim:getPiece(math.floor((1+math.sin(i)*0.3)*love.timer.getTime()*anim.framerate)), v.x, v.y,0,0.3,0.3,(100/2),(94/2))
+	end
 
 end
 
@@ -97,6 +102,12 @@ function state:keypressed(key, isRepeat)
 	end
 	if key==" " then
 		client:send(JSON:encode({command="debug", data={}}))
+	end
+	if key=='m' then
+		table.insert(markers,{
+			x= love.mouse.getX(),
+			y= love.mouse.getY()
+		})
 	end
 end
 

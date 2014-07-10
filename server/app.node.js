@@ -17,8 +17,8 @@ var server = net.createServer(function (socket) {
     conn.on("jump", function(data){
         sim.playerShip.x = data.x;
         sim.playerShip.y = data.y;
-        sim.playerShip.stop();
-        sim.playerShip.start();
+        //sim.playerShip.stop();
+        
     });
     
     conn.on("fire", function(data){
@@ -31,5 +31,8 @@ var server = net.createServer(function (socket) {
 });
 
 
+
+
+
 server.listen(1337, '0.0.0.0');
-console.log("Listening...");
+console.log("Listening...");   

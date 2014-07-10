@@ -5,6 +5,7 @@ var useful = require("./../useful");
 var Signature = require("./Signature");
 
 function Enemy(sim){
+	this.identifier = "Enemy";
     var coord = useful.getRandomCoordinates();
     this.x = coord.x;
     this.y = coord.y;

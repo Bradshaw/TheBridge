@@ -10,14 +10,57 @@ var Drone = require("./Drone");
 function Simulator(){
     this.playerShip = new Ship(this);
     this.space = [this.playerShip];
-    for (var i=0; i<10; i++){
+    this.playerShip.start();
+    
+    for (var i=0; i<5; i++){
         this.space.push(new Celestial(this));
     }
     for (var i=0; i<1; i++){
         this.space.push(new Drone(this));
     }
+
+    this.start();
+    this.displaySpace();
+
     this.connections = [];
 }
+
+Simulator.prototype.displaySpace = function(){
+    this.displaySpace = setInterval(this.dispSpace.bind(this), 1000);
+};
+
+Simulator.prototype.start = function(){
+    this.interval = setInterval(this.destroyDistantDrone.bind(this), 1000);  
+};
+
+Simulator.prototype.dispSpace = function(){
+
+    var that = this;
+    //console.log(that.playerShip.x + " " +that.playerShip.y);
+    var res = that.playerShip.x + " " +that.playerShip.y;
+    _.each(this.space, function(ob){
+        if(ob.identifier == "Drone"){
+            
+             res += useful.distance(that.playerShip, ob)   + " ";
+            //res += ob.identifier + " ";
+        }        
+    });
+    console.log(res);
+}
+
+Simulator.prototype.destroyDistantDrone = function(){
+    var that = this;
+    lazy(this.space).filter(this.space, function(ob) {
+        return ob.identifier == "Drone";
+    }).filter(function(ob){
+        return useful.distance(that.playerShip, ob) > 10;
+    }).each(function(ob){
+        ob.purge = true;//*/
+    });
+    this.prune();
+
+};
+
 
 Simulator.prototype.prune = function(){
     this.space = lazy(this.space).filter(
@@ -66,5 +109,9 @@ Simulator.prototype.dump = function(){
         that.send({dump: {x: ob.x, y:ob.y}});        
     });
 };
+
+
+
+
 
 module.exports = Simulator;

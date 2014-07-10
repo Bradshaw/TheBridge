@@ -5,6 +5,7 @@ var useful = require("./useful");
 
 
 function Ship(){
+    this.identifier = "Ship";
 	this.mspt = 1000/100;
     this.ambiantTemperature = 20;
     this.gun  = {

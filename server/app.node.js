@@ -13,20 +13,32 @@ var server = net.createServer(function (socket) {
     var conn = new Connection(socket);
     
     sim.addConnection(conn);
-    
+    conn.on("deployDrone", function(data){
+        //()
+    });
+
+    conn.on("retrieveDrones", function(data){
+        //()
+    });
+
+    conn.on("moveDrone", function(data){
+        //(id, x, y)
+    });
+
+    conn.on("scanDrone", function(data){
+        //(id, x, y)
+    });
+
     conn.on("jump", function(data){
-        sim.playerShip.x = data.x;
-        sim.playerShip.y = data.y;
-        sim.playerShip.stop();
-        sim.playerShip.start();
+        //(x, y)
     });
-    
+
     conn.on("fire", function(data){
-        sim.fire(data);
+        //(angle, speed, time)
     });
-    
-    conn.on("debug", function(){
-         sim.dump();
+
+    conn.on("set", function(data){
+        //(module, subsystem, value)
     });
 });
 

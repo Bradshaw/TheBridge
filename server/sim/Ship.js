@@ -107,6 +107,7 @@ Ship.prototype.getStatus = function(){
         ready: this.jumpDrive.charge>800,
         temp: this.jumpDrive.temperature
     };
+    status.drones = {};
     return status;
 };
 

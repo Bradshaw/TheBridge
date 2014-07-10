@@ -7,6 +7,7 @@ var Sensor = require("./Sensor");
 
 function Drone(sim){
     var coord = useful.getRandomCoordinates();
+    this.id = useful.guid();
     this.x = coord.x;
     this.y = coord.y;
     this.sim = sim;

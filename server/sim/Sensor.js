@@ -8,8 +8,25 @@ function Sensor(sim, attach){
     this.sim = sim;
 }
 
-Sensor.prototype.impulse = function(x, y, range){
-      
+Sensor.prototype.impulse = function(pulse){
+    var that = this;
+    var th = pulse.sig.getTH(useful.distance(that.attach, pulse));
+    if( (th > 20) ){
+        that.sim.send(
+            {
+                pulse: {
+                    x: pulse.x,
+                    y: pulse.y,
+                    reading: {
+                        name: "th",
+                        method: "range",
+                        threshold: 20,
+                        intensity : th,
+                        value: pulse.radius
+                    }
+                }
+            });
+    }
 };
 
 Sensor.prototype.start = function(){

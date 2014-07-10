@@ -12,6 +12,9 @@ function state:enter( pre )
 	markers = {}
 end
 
+function send(command, data)
+	client:send(JSON:encode({command=command, data=(data or {})}))
+end
 
 function state:leave( next )
 end
@@ -67,6 +70,20 @@ function state:update(dt)
 				--love.graphics.setLineStyle("smooth")
 				love.graphics.setCanvas()
 			end
+		end
+		if o.pulse then
+			local sensor = o.pulse
+			local x = tonumber(sensor.x)
+			local y = tonumber(sensor.y)
+			local read = sensor.reading
+			love.graphics.setCanvas(map_canv)
+			love.graphics.setBlendMode("alpha")
+			local intensity = math.min(255,math.max(0, read.intensity-read.threshold))
+			love.graphics.setColor(255,125,0,intensity/2)
+			love.graphics.circle("fill", x, y, read.value)
+			love.graphics.setColor(255,125,0,intensity)
+			love.graphics.circle("line", x, y, read.value)
+			love.graphics.setCanvas()
 		end
 		ret = client:receive()
 	end
@@ -143,6 +160,9 @@ function state:keypressed(key, isRepeat)
 			x= love.mouse.getX(),
 			y= love.mouse.getY()
 		})
+	end
+	if key=="x" then
+		send("bomb", {x=love.mouse.getX(),y=love.mouse.getY(),speed=100})
 	end
 end
 

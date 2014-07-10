@@ -6,6 +6,7 @@ var Ship = require("./Ship");
 var Celestial = require("./Celestial");
 var Enemy = require("./Enemy");
 var Drone = require("./Drone");
+var Signature = require("./Signature");
 
 function Simulator(){
     this.playerShip = new Ship(this);
@@ -15,9 +16,6 @@ function Simulator(){
     }
     for (var i=0; i<10; i++){
         this.space.push(new Enemy(this));
-    }
-    for (var i=0; i<1; i++){
-        this.space.push(new Drone(this));
     }
     this.connections = [];
 }
@@ -45,7 +43,7 @@ Simulator.prototype.explode = function(x, y, range){
     lazy(this.space).filter(function(ob){
         return ob.hasOwnProperty("sensor");
     }).each(function(ob){
-        ob.sensor.impulse(x, y, range);
+        ob.sensor.impulse({x:x, y:y, sig: new Signature(400*range, 0), radius: range});
     });
 };
 

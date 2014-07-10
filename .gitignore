@@ -1,3 +1,5 @@
 node_modules
 *.log
 .idea
+client/src/images/tag_planet/Thumbs.db
+client/src/images/tag_ship/Thumbs.db

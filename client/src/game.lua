@@ -103,7 +103,7 @@ function state:draw()
 	love.graphics.setCanvas()
 	love.graphics.setColor(0,255,255)
 	love.graphics.setShader(alphaToWhite)
-	love.graphics.draw("ani_cursor", mouseX, mouseY,0,mousedown,mousedown,(100/2),(94/2))
+	love.graphics.draw("ani_cursor", mouseX, mouseY,0,mousedown,mousedown,50,51)
 	for i,v in ipairs(markers) do
 		anim = cursor:getAnimation("ani_cursor")
 		love.graphics.draw(anim:getPiece(math.floor((1+math.sin(i)*0.3)*love.timer.getTime()*anim.framerate)), v.x, v.y,0,0.3,0.3,(100/2),(94/2))
@@ -116,9 +116,10 @@ function state:draw()
 		love.graphics.draw(anim,
 			status.ship.x,
 			status.ship.y,
-			0,0.3,0.3,(268/2),(283/2))
+			0,0.3,0.3,140,145)
 		love.graphics.setColor(0,255,255,25)
 		love.graphics.circle("fill", status.ship.x, status.ship.y, 200)
+		love.graphics.circle("fill", status.ship.x, status.ship.y, 50)
 		love.graphics.setShader()
 		love.graphics.setColor(255,255,255)
 		print("have status")
@@ -156,6 +157,8 @@ function state:draw()
 				love.graphics.circle("fill", v.x, v.y, 5)
 				love.graphics.setColor(255,0,255,25)
 				love.graphics.circle("fill", v.x, v.y, 200)
+				love.graphics.setColor(255,0,255,25)
+				love.graphics.circle("fill", v.x, v.y, 20)
 				line = line+1
 			end
 		end

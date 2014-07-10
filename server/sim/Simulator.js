@@ -11,14 +11,40 @@ var Signature = require("./Signature");
 function Simulator(){
     this.playerShip = new Ship(this);
     this.space = [this.playerShip];
+    this.playerShip.start();
+    
     for (var i=0; i<10; i++){
         this.space.push(new Celestial(this));
     }
     for (var i=0; i<10; i++){
         this.space.push(new Enemy(this));
     }
+    for (var i=0; i<1; i++){
+        this.space.push(new Drone(this));
+    }
+
+    this.start();
+
     this.connections = [];
 }
+
+Simulator.prototype.start = function(){
+    this.interval = setInterval(this.destroyDistantDrone.bind(this), 1000);  
+};
+
+Simulator.prototype.destroyDistantDrone = function(){
+    var that = this;
+    lazy(this.space).filter(this.space, function(ob) {
+        return ob.identifier == "Drone";
+    }).filter(function(ob){
+        return useful.distance(that.playerShip, ob) > 10;
+    }).each(function(ob){
+        ob.purge = true;//*/
+    });
+    this.prune();
+
+};
+
 
 Simulator.prototype.prune = function(){
     this.space = lazy(this.space).filter(

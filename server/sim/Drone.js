@@ -6,6 +6,7 @@ var Signature = require("./Signature");
 var Sensor = require("./Sensor");
 
 function Drone(sim){
+	this.identifier = "Drone";
     var coord = useful.getRandomCoordinates();
     this.id = useful.guid();
     this.x = coord.x;

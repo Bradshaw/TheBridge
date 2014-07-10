@@ -36,5 +36,11 @@ useful.getRandomCoordinates = function(){
     }
 };
 
+useful.clamp = function(val, min, max){
+    var m = (min==undefined?0:min);
+    var M = (max==undefined?1:max);
+    return Math.min(M,Math.max(m,val));
+};
+
 
 module.exports = useful;

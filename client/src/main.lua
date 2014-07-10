@@ -20,6 +20,9 @@ function love.load(arg)
 		framerate = 30
 	})
 
+	darken = love.graphics.newShader("shaders/darken.fs")
+	alphaToWhite = love.graphics.newShader("shaders/alphaToWhite.fs")
+
 	map_canv = love.graphics.newCanvas(love.graphics.getWidth(),love.graphics.getHeight())
 	love.graphics.setCanvas(map_canv)
 	love.graphics.setColor(255,255,255)

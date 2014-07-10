@@ -32,7 +32,6 @@ Sensor.prototype.ping = function(){
         var th = ob.signature.getTH(useful.distance(that.attach, ob));
 
         if( (em > 20) ){
-            console.log(em);
             that.sim.send(
                 {
                     sensor: {
@@ -49,7 +48,6 @@ Sensor.prototype.ping = function(){
                 });
         }
         if( (gr > 20) ){
-            //console.log("grrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
             that.sim.send(
                 {
                     sensor: {
@@ -66,8 +64,7 @@ Sensor.prototype.ping = function(){
                     }
                 });
         }
-        if( (th > 400000000000) ){
-            //console.log("thhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        if( (th > 40) ){
             that.sim.send(
                 {
                     sensor: {

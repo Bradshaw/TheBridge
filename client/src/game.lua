@@ -31,6 +31,9 @@ function state:update(dt)
 	ret = client:receive()
 	while ret do
 		local o = JSON:decode(ret)
+		if o.status then
+			status = o.status
+		end
 		if o.dump then
 			love.graphics.setCanvas(map_canv)
 			love.graphics.setColor(255,255,255)
@@ -54,13 +57,14 @@ function state:update(dt)
 				else
 					love.graphics.setColor(255,0,0,intensity)
 				end
-
+				--love.graphics.setLineStyle("rough")
 				if read.method == "range" then
 					love.graphics.circle("line", x, y, tonumber(read.value));
 				else
 					local d = tonumber(read.value)
 					love.graphics.line(x, y, x+math.cos(d)*1000, y+math.sin(d)*1000)
 				end
+				--love.graphics.setLineStyle("smooth")
 				love.graphics.setCanvas()
 			end
 		end
@@ -73,18 +77,49 @@ function state:draw()
 	love.graphics.setCanvas()
 	love.graphics.setBlendMode("alpha")
 	love.graphics.setColor(255,255,255)
+	love.graphics.setShader(darken)
 	love.graphics.draw(map_canv)
+	love.graphics.setShader()
 	love.graphics.setCanvas(map_canv)
 	love.graphics.setColor(0,0,0,5)
 	love.graphics.rectangle("fill",0,0,love.graphics.getWidth(),love.graphics.getHeight())
 	love.graphics.setCanvas()
-	love.graphics.setColor(255,255,255)
+	love.graphics.setColor(0,255,255)
+	love.graphics.setShader(alphaToWhite)
 	love.graphics.draw("ani_cursor", mouseX, mouseY,0,mousedown,mousedown,(100/2),(94/2))
 	for i,v in ipairs(markers) do
 		anim = cursor:getAnimation("ani_cursor")
 		love.graphics.draw(anim:getPiece(math.floor((1+math.sin(i)*0.3)*love.timer.getTime()*anim.framerate)), v.x, v.y,0,0.3,0.3,(100/2),(94/2))
 	end
-
+	love.graphics.setShader()
+	if status then
+		print("have status")
+		local line = 1
+		love.graphics.print("Gun:",10,line*20)
+		line = line +1
+		for k,v in pairs(status.gun) do
+			local v = v
+			if type(v)=="boolean" then
+				v = v and "TRUE" or "FALSE"
+			end
+			love.graphics.print(k..": "..v, 20, line*20)
+			line = line+1
+		end
+				love.graphics.print("Jump Drive:",10,line*20)
+		line = line +1
+		for k,v in pairs(status.jumpDrive) do
+			local v = v
+			if type(v)=="boolean" then
+				if v then
+					v = "TRUE"
+				else
+					v = "FALSE"
+				end
+			end
+			love.graphics.print(k..": "..v, 20, line*20)
+			line = line+1
+		end
+	end
 end
 
 

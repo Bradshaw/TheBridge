@@ -14,10 +14,10 @@ function Simulator(){
     this.space = [this.playerShip];
     this.playerShip.start();
     var i;
-    for (i=0; i<10; i++){
+    for (i=0; i<5+Math.random()*10; i++){
         this.space.push(new Celestial(this));
     }
-    for (i=0; i<10; i++){
+    for (i=0; i<Math.random()*11-1; i++){
         var en = new Enemy(this);
         while (useful.distance(en, this.playerShip)<200){
             var c = useful.getRandomCoordinates();

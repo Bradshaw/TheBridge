@@ -11,6 +11,7 @@ function state:enter( pre )
 	mouseX = 0
 	mouseY = 0
 	markers = {}
+	tags = {}
 	gunCoolSlider = slider.new(300,10,100,20,0,1,0)
 	gunCoolSlider.pushVal = function(val)
 		set("gun","curCool",val)
@@ -72,6 +73,10 @@ function state:update(dt)
 			gunChargeSlider.value = status.gun.rate
 			jumpDriveCoolSlider.value = status.jumpDrive.cooling
 			jumpDriveChargeSlider.value = status.jumpDrive.rate
+		end
+		if o.tag then
+			print("TAG!")
+			tags[o.tag.mark] = o.tag
 		end
 		if o.dump then
 			love.graphics.setCanvas(map_canv)
@@ -147,6 +152,29 @@ function state:draw()
 		anim = cursor:getAnimation("ani_cursor")
 		love.graphics.draw(anim:getPiece(math.floor((1+math.sin(i)*0.3)*love.timer.getTime()*anim.framerate)), v.x, v.y,0,0.3,0.3,(100/2),(94/2))
 	end
+	local i = 1
+	for k,v in pairs(tags) do
+		i = i+1
+		if v.identifier=="Enemy"then
+			anim = tag_ship:getAnimation("ani_cursor")
+			love.graphics.setColor(255,125,0)
+			love.graphics.draw(
+					anim:getPiece(math.floor((1+math.sin(i)*0.3)*love.timer.getTime()*anim.framerate)), 
+					v.x, v.y,0,0.2,0.2,140,145)
+		elseif v.identifier=="Celestial" then
+			anim = tag_planet:getAnimation("ani_cursor")
+			love.graphics.setColor(125,255,0)
+			love.graphics.draw(
+					anim:getPiece(math.floor((1+math.sin(i)*0.3)*love.timer.getTime()*anim.framerate)), 
+					v.x, v.y,0,0.5,0.5,90,91)
+		else
+			anim = cursor:getAnimation("ani_cursor")
+			love.graphics.setColor(0,255,255)
+			love.graphics.draw(
+					anim:getPiece(math.floor((1+math.sin(i)*0.3)*love.timer.getTime()*anim.framerate)), 
+					v.x, v.y,0,0.3,0.3,(100/2),(94/2))
+		end
+	end
 	love.graphics.setShader()
 	if status then
 		love.graphics.setColor(0,255,255)
@@ -176,7 +204,6 @@ function state:draw()
 		end
 		love.graphics.setShader()
 		love.graphics.setColor(255,255,255)
-		print("have status")
 		local line = 1
 		love.graphics.print("Gun:",10,line*20)
 		line = line +1
@@ -294,6 +321,9 @@ function state:keypressed(key, isRepeat)
 	end
 	if key=="l" then
 		set("gun", "loading", math.floor(1-status.gun.loading))
+	end
+	if key=="c" then
+		tags = {}
 	end
 end
 

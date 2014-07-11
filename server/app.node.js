@@ -71,13 +71,14 @@ var server = net.createServer(function (socket) {
             .find(function(ob){
                 return ob.identifier=="Drone" && useful.distance(ob, data)<200;
             });
-        if (drone && !drone.warping) {
+        if (sim.playerShip.markers>0 && drone && !drone.warping) {
+            sim.playerShip.markers--;
             lazy(sim.space)
                 .filter(function(ob){
-                    return useful.distance(data, ob)<10;
+                    return useful.distance(data, ob)<30;
                 })
                 .each(function(ob){
-                    ob.marked = true;
+                    ob.marked = useful.guid();
                 });
         }
     });

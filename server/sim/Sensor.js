@@ -45,78 +45,88 @@ Sensor.prototype.stop = function() {
 Sensor.prototype.ping = function(){
     var that = this;
     lazy(this.sim.space)
-    .filter(function(ob){
-        return !ob.marked;      
-    })
     .each(function(ob){
         var em = ob.signature.getEM(useful.distance(that.attach, ob));
         var gr = ob.signature.getGR(useful.distance(that.attach, ob));
         var th = ob.signature.getTH(useful.distance(that.attach, ob));
+        
+        if (ob.marked){
+            that.sim.send(
+                {
+                    tag: {
+                        x: ob.x,
+                        y: ob.y,
+                        identifier: ob.identifier,
+                        mark: ob.marked
+                    }
+                }
+            );
+        } else {
 
-        if( (em > 20) ){
-            that.sim.send(
-                {
-                    sensor: {
-                        x: that.attach.x,
-                        y: that.attach.y,
-                        reading: {
-                            name: "em",
-                            method: "range",
-                            value: useful.distance(that.attach, ob),
-                            threshold: 20,
-                            intensity : em
+            if ((em > 20)) {
+                that.sim.send(
+                    {
+                        sensor: {
+                            x: that.attach.x,
+                            y: that.attach.y,
+                            reading: {
+                                name: "em",
+                                method: "range",
+                                value: useful.distance(that.attach, ob),
+                                threshold: 20,
+                                intensity: em
+                            }
                         }
-                    }
-                });
-        }
-        if( (gr > 20) ){
-            that.sim.send(
-                {
-                    sensor: {
-                        x: that.attach.x,
-                        y: that.attach.y,
-                        reading: {
-                            name: "gr",
-                            method: "angle",
-                            value: useful.angle(that.attach, ob),
-                            threshold: 20,
-                            intensity : gr
+                    });
+            }
+            if ((gr > 20)) {
+                that.sim.send(
+                    {
+                        sensor: {
+                            x: that.attach.x,
+                            y: that.attach.y,
+                            reading: {
+                                name: "gr",
+                                method: "angle",
+                                value: useful.angle(that.attach, ob),
+                                threshold: 20,
+                                intensity: gr
 
+                            }
                         }
-                    }
-                });
+                    });
+            }
+            if ((th > 40)) {
+                that.sim.send(
+                    {
+                        sensor: {
+                            x: that.attach.x,
+                            y: that.attach.y,
+                            reading: {
+                                name: "th",
+                                method: "range",
+                                value: useful.distance(that.attach, ob),
+                                threshold: 50,
+                                intensity: th
+                            }
+                        }
+                    });
+                that.sim.send(
+                    {
+                        sensor: {
+                            x: that.attach.x,
+                            y: that.attach.y,
+                            reading: {
+                                name: "th",
+                                method: "angle",
+                                value: useful.angle(that.attach, ob),
+                                threshold: 50,
+                                intensity: th
+                            }
+                        }
+                    });
+            }
         }
-        if( (th > 40) ){
-            that.sim.send(
-                {
-                    sensor: {
-                        x: that.attach.x,
-                        y: that.attach.y,
-                        reading: {
-                            name: "th",
-                            method: "range",
-                            value: useful.distance(that.attach, ob),
-                            threshold: 50,
-                            intensity : th
-                        }
-                    }
-                });
-            that.sim.send(
-                {
-                    sensor: {
-                        x: that.attach.x,
-                        y: that.attach.y,
-                        reading: {
-                            name: "th",
-                            method: "angle",
-                            value: useful.angle(that.attach, ob),
-                            threshold: 50,
-                            intensity : th
-                        }
-                    }
-                });
-        }
-
     });
 };
 

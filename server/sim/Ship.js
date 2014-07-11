@@ -18,6 +18,7 @@ function Ship(sim){
 	this.mspt = 1000/100;
     this.ambiantTemperature = 20;
     this.availableDrones = 5;
+    this.markers = 10;
     this.gun  = {
         minRate: 0,
         maxRate: 1,
@@ -92,7 +93,9 @@ Ship.prototype.fire = function(){
 };
 
 Ship.prototype.getStatus = function(){
-    var status = {};
+    var status = {
+        markers: this.markers
+    };
     status.ship = {
         x: this.x,
         y: this.y

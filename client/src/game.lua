@@ -1,6 +1,7 @@
 local state = {}
 
 function state:init()
+	chev = love.graphics.newImage("images/chevron.png")
 end
 
 
@@ -10,6 +11,28 @@ function state:enter( pre )
 	mouseX = 0
 	mouseY = 0
 	markers = {}
+	gunCoolSlider = slider.new(300,10,100,20,0,1,0)
+	gunCoolSlider.pushVal = function(val)
+		set("gun","curCool",val)
+	end
+	gunCoolSlider.label = "Gun cooling"
+	gunChargeSlider = slider.new(300,40,100,20,0,1,0)
+	gunChargeSlider.pushVal = function(val)
+		set("gun","curRate",val)
+	end
+	gunChargeSlider.label = "Gun charging"
+
+	jumpDriveCoolSlider = slider.new(300,70,100,20,0,1,0)
+	jumpDriveCoolSlider.pushVal = function(val)
+		set("jumpDrive","curCool",val)
+	end
+	jumpDriveCoolSlider.label = "Jump Drive cooling"
+	jumpDriveChargeSlider = slider.new(300,100,100,20,0,1,0)
+	jumpDriveChargeSlider.pushVal = function(val)
+		set("jumpDrive","curRate",val)
+	end
+	jumpDriveChargeSlider.label = "Jump Drive charging"
+
 end
 
 function send(command, data)
@@ -20,6 +43,15 @@ function state:leave( next )
 end
 
 function state:update(dt)
+	if love.mouse.isDown("l") then
+		local mx = love.mouse.getX()
+		local my = love.mouse.getY()
+		for i,v in ipairs(slider.all) do
+			v:canActivate(mx, my, function()
+				v:activate(mx, my)
+			end)
+		end
+	end
 	if love.mouse.isDown('r') then
 		mousedown = math.min(1, mousedown+dt*10)
 		mouseX = love.mouse.getX()
@@ -36,6 +68,10 @@ function state:update(dt)
 		local o = JSON:decode(ret)
 		if o.status then
 			status = o.status
+			gunCoolSlider.value = status.gun.cooling
+			gunChargeSlider.value = status.gun.rate
+			jumpDriveCoolSlider.value = status.jumpDrive.cooling
+			jumpDriveChargeSlider.value = status.jumpDrive.rate
 		end
 		if o.dump then
 			love.graphics.setCanvas(map_canv)
@@ -72,6 +108,9 @@ function state:update(dt)
 			end
 		end
 		if o.pulse then
+			for k,v in pairs(o.pulse.reading) do
+				print(k,v)
+			end
 			local sensor = o.pulse
 			local x = tonumber(sensor.x)
 			local y = tonumber(sensor.y)
@@ -112,14 +151,29 @@ function state:draw()
 	if status then
 		love.graphics.setColor(0,255,255)
 		love.graphics.setShader(alphaToWhite)
+
 		anim = tag_ship:getAnimation("ani_cursor")
-		love.graphics.draw(anim,
-			status.ship.x,
-			status.ship.y,
-			0,0.3,0.3,140,145)
-		love.graphics.setColor(0,255,255,25)
-		love.graphics.circle("fill", status.ship.x, status.ship.y, 200)
-		love.graphics.circle("fill", status.ship.x, status.ship.y, 50)
+		if status.ship.warping then
+			love.graphics.setColor(0,255,255,80)
+			local x = (status.ship.x+status.ship.warpingTo.x)/2
+			local y = (status.ship.y+status.ship.warpingTo.y)/2
+			local dx = status.ship.warpingTo.x-status.ship.x
+			local dy = status.ship.warpingTo.y-status.ship.y
+			local d = math.sqrt(dx*dx+dy*dy)
+			local a = math.atan2(dy,dx)
+			love.graphics.setShader(chevshad)
+			chevshad:send("times",(d/20))
+			chevshad:send("time",(-love.timer.getTime()*2)%1)
+			love.graphics.draw(chev,x,y,a,d/100,0.2,50,50)
+		else
+			love.graphics.draw(anim,
+				status.ship.x,
+				status.ship.y,
+				0,0.3,0.3,140,145)
+			love.graphics.setColor(0,255,255,25)
+			love.graphics.circle("fill", status.ship.x, status.ship.y, 200)
+			love.graphics.circle("fill", status.ship.x, status.ship.y, 50)
+		end
 		love.graphics.setShader()
 		love.graphics.setColor(255,255,255)
 		print("have status")
@@ -152,16 +206,35 @@ function state:draw()
 		line = line+1
 		if status.drones then
 			for i,v in ipairs(status.drones) do
-				love.graphics.setColor(255,0,255)
+				if v.warping then
+					love.graphics.setColor(255,0,255,80)
+					local x = (v.x+v.warpingTo.x)/2
+					local y = (v.y+v.warpingTo.y)/2
+					local dx = v.warpingTo.x-v.x
+					local dy = v.warpingTo.y-v.y
+					local d = math.sqrt(dx*dx+dy*dy)
+					local a = math.atan2(dy,dx)
+					love.graphics.setShader(chevshad)
+					chevshad:send("times",(d/10))
+					chevshad:send("time",(-love.timer.getTime()*2)%1)
+					love.graphics.draw(chev,x,y,a,d/100,0.1,50,50)
+					love.graphics.setShader()
+				else
+					love.graphics.setColor(255,0,255)
+					love.graphics.circle("fill", v.x, v.y, 5)
+					love.graphics.setColor(255,0,255,25)
+					love.graphics.circle("fill", v.x, v.y, 200)
+					love.graphics.setColor(255,0,255,25)
+					love.graphics.circle("fill", v.x, v.y, 20)
+				end
 				love.graphics.print(v.id, 20, 20*line)
-				love.graphics.circle("fill", v.x, v.y, 5)
-				love.graphics.setColor(255,0,255,25)
-				love.graphics.circle("fill", v.x, v.y, 200)
-				love.graphics.setColor(255,0,255,25)
-				love.graphics.circle("fill", v.x, v.y, 20)
 				line = line+1
 			end
 		end
+	end
+	love.graphics.setColor(255,255,255)
+	for i,v in ipairs(slider.all) do
+		v:draw()
 	end
 end
 
@@ -188,7 +261,15 @@ function state:keypressed(key, isRepeat)
 		})
 	end
 	if key=="x" then
-		send("bomb", {x=love.mouse.getX(),y=love.mouse.getY(),speed=100})
+		local dx = love.mouse.getX()-status.ship.x
+		local dy = love.mouse.getY()-status.ship.y
+		local d = math.sqrt(dx*dx+dy*dy)
+
+		fire(
+			math.atan2(dy, dx),
+			50,
+			d
+		)
 	end
 	if key=="d" then
 		deployDrone()
@@ -205,7 +286,15 @@ function state:keypressed(key, isRepeat)
 			)
 		end
 	end
-
+	if key=="s" then
+		scanDrone(
+			love.mouse.getX(),
+			love.mouse.getY()
+		)
+	end
+	if key=="l" then
+		set("gun", "loading", math.floor(1-status.gun.loading))
+	end
 end
 
 

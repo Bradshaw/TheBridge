@@ -7,16 +7,17 @@ var Celestial = require("./Celestial");
 var Enemy = require("./Enemy");
 var Drone = require("./Drone");
 var Signature = require("./Signature");
+var Bomb = require("./Bomb");
 
 function Simulator(){
     this.playerShip = new Ship(this);
     this.space = [this.playerShip];
     this.playerShip.start();
-    
-    for (var i=0; i<10; i++){
+    var i;
+    for (i=0; i<10; i++){
         this.space.push(new Celestial(this));
     }
-    for (var i=0; i<10; i++){
+    for (i=0; i<10; i++){
         var en = new Enemy(this);
         while (useful.distance(en, this.playerShip)<200){
             var c = useful.getRandomCoordinates();
@@ -66,13 +67,19 @@ Simulator.prototype.explode = function(x, y, range){
     }).filter(function(ob){
         return useful.distance2({x:x, y:y}, ob)<(range*range);
     }).each(function(ob){
-        ob.purge = true; 
+        console.log("KILL: "+ob.identifier);
+        ob.purge = true;
+        if (ob.hasOwnProperty("stop"))
+            ob.stop();
+        if (ob.hasOwnProperty("sensor")){
+            ob.sensor.stop();
+        }
     });
     this.prune();
     lazy(this.space).filter(function(ob){
         return ob.hasOwnProperty("sensor");
     }).each(function(ob){
-        ob.sensor.impulse({x:x, y:y, sig: new Signature(400*range, 0), radius: range});
+        ob.sensor.impulse({x:x, y:y, sig: new Signature(0,0,50000000), radius: range});
     });
 };
 

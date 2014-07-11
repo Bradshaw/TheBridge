@@ -14,8 +14,8 @@ function moveDrone(id, x, y)
 		})
 end
 
-function scanDrone(id, x, y)
-	send("moveDrone", {
+function scanDrone(x, y)
+	send("scanDrone", {
 		id = id,
 		x = x,
 		y = y
@@ -29,8 +29,18 @@ function jump(x, y)
 		})
 end
 
-function fire(angle, speed, time)
+function fire(angle, speed, distance)
+	send("fire",{
+		angle = angle,
+		speed = speed,
+		distance = distance
+	})
 end
 
 function set(module, subsystem, value)
+	send("set", {
+		module = module,
+		subsystem = subsystem,
+		value = value
+	})
 end

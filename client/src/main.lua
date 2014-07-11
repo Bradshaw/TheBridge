@@ -1,6 +1,7 @@
 require("useful")
 function love.load(arg)
 	require("commands")
+	require("slider")
 	JSON = require("JSON")
 	require("brdcastcl")
 	client = EchoClient:new()
@@ -32,6 +33,7 @@ function love.load(arg)
 
 	darken = love.graphics.newShader("shaders/darken.fs")
 	alphaToWhite = love.graphics.newShader("shaders/alphaToWhite.fs")
+	chevshad = love.graphics.newShader("shaders/chev.fs")
 
 	map_canv = love.graphics.newCanvas(love.graphics.getWidth(),love.graphics.getHeight())
 	love.graphics.setCanvas(map_canv)

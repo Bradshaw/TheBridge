@@ -7,7 +7,7 @@ var useful = require("./../useful");
 function Signature(em, gr, th){
     this.em = em;
     this.gr = gr;
-    this.th = (em+gr)/2;
+    this.th = Math.max(th,(em+gr)/2);
 }
 
 Signature.prototype.getAtRange = function(sig, range){

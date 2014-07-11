@@ -7,6 +7,7 @@ var Sensor = require("./Sensor");
 
 
 function Ship(sim){
+    this.identifier = "Player";
     var coord = useful.getRandomCoordinates();
     this.x = coord.x;
     this.y = coord.y;
@@ -20,13 +21,13 @@ function Ship(sim){
     this.gun  = {
         minRate: 0,
         maxRate: 1,
-        curRate: 0.8,
+        curRate: 0,
         disRate: 0.001,
         minCool: 0.0002,
         maxCool: 0.0025,
-        curCool: 0.5,
+        curCool: 0,
         charge: 0,
-        loading: true,
+        loading: 0,
         load: 0,
         chargeHeat: 0.0002,
         temperature: this.ambiantTemperature
@@ -34,11 +35,11 @@ function Ship(sim){
     this.jumpDrive  = {
         minRate: 0,
         maxRate: 1,
-        curRate: 1,
+        curRate: 0,
         disRate: 0.001,
         minCool: 0.0002,
         maxCool: 0.0025,
-        curCool: 1,
+        curCool: 0,
         charge: 0,
         chargeHeat: 0.0002,
         temperature: this.ambiantTemperature
@@ -56,7 +57,7 @@ Ship.prototype.tick = function() {
     this.gun.charge = this.gun.charge + useful.lerp(this.gun.minRate, this.gun.maxRate, this.gun.curRate)*useful.jitter();
     this.gun.temperature = this.gun.temperature - (this.gun.temperature - this.ambiantTemperature)*useful.lerp(this.gun.minCool, this.gun.maxCool, this.gun.curCool)*useful.jitter();
     this.gun.temperature = this.gun.temperature + this.gun.charge * this.gun.chargeHeat*useful.jitter();
-    this.gun.load = useful.clamp(this.gun.load+(this.gun.loading?1:-1)*0.01);
+    this.gun.load = useful.clamp(this.gun.load+(this.gun.loading>0.5?1:-1)*0.01);
 
     // Tick jumpDrive
     this.jumpDrive.charge = this.jumpDrive.charge - this.jumpDrive.charge*this.jumpDrive.disRate*useful.jitter();
@@ -96,6 +97,10 @@ Ship.prototype.getStatus = function(){
         x: this.x,
         y: this.y
     };
+    if (this.warping) {
+        status.ship.warping = true;
+        status.ship.warpingTo = this.warpingTo;
+    }
     status.gun = {
         charge: this.gun.charge,
         cooling: this.gun.curCool,
@@ -118,11 +123,16 @@ Ship.prototype.getStatus = function(){
             return ob.identifier=="Drone"
         })
         .map(function(ob){
-            return {
+            droneStatus = {
                 x: ob.x,
                 y: ob.y,
                 id: ob.id
             };
+            if (ob.warping) {
+                droneStatus.warping = true;
+                droneStatus.warpingTo = ob.warpingTo;
+            }
+            return droneStatus;
         })
         .toArray();
     
